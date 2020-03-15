@@ -3,7 +3,8 @@ const express = require('express');
 // express를 실행하는 것을 app이라고 상수화
 const app = express();
 const mongoose = require('mongoose');
-
+const morgan = require('morgan');
+const bodyparser = require('body-parser');
 
 // server.js파일에서 route를 만들어 productsRoute, ordersRoute로 상수화
 const productsRoute = require('./api/routes/products');
@@ -16,7 +17,9 @@ mongoose.connect(mongoDBurl, {useNewUrlParser:true, useUnifiedTopology:true})
     .catch(err => console.log(err.message));
 
 
-
+app.use(morgan("dev"));
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}));
 app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
 
